@@ -1,43 +1,20 @@
 import json
+import random
+import os
 
 from django.shortcuts import render
 from django.http import HttpResponse
 
 import secretkey
-
+from . import datamaker
 # Create your views here.
 
 def getAct(request):
-    sampjson = {
-        "userNum": 3,
-        "users": [
-            {
-                "userName": "user1",
-                "userAct": [
-                    1.1,
-                    8.9
-                ]
-            },
-            {
-                "userName": "user2",
-                "userAct": [
-                    3.2,
-                    7.4
-                ]
-            },
-            {
-                "userName": "user3",
-                "userAct": [
-                    23.5,
-                    92.1
-                ]
-            }
-        ]
-    }
+    retjson = datamaker.randomUsers()
     try:
         if request.GET['key'] == secretkey.secretKey:
             print("Get getAct from room %s" % (request.GET['roomid']))
-            return HttpResponse(json.dumps(sampjson))
+            return HttpResponse(json.dumps(retjson))
         else:
             return HttpResponse("Certification failed")
     except:
@@ -56,4 +33,14 @@ def submitResult(request):
         return HttpResponse("Invalid request")
 
 def startRoom(request):
-    return HttpResponse("1")
+    try:
+        if request.GET['key'] == secretkey.secretKey:
+            cmd = "python3 plug-ins/goldennum.py " + secretkey.secretKey + " " + request.GET['roomid'] + " " + request.GET['time']
+            cmd_run = "nohup " + cmd + " &"
+            cmd_kill = "kill -s 9"
+            os.system(cmd_run)
+            return HttpResponse("success")
+        else:
+            HttpResponse("Certification failed")
+    except:
+        return HttpResponse("Invalid request")

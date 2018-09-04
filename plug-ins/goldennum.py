@@ -26,7 +26,7 @@ class MyThread(Thread):
 
     def run(self):
         while not self.stopped.wait(sleeptime):
-            print("thread start")
+            print("\nThread start")
             getAct(roomid)
             submitResult(roomid)
 
@@ -53,8 +53,9 @@ def getAct(roomid):
     requestData = {"roomid":roomid, "key":secretKey}
     # print(requestData)
     # values = requests.get(url+"/getAct/",params=requestData)
-    values = requests.get(url+"/getAct/",params=requestData).json()
-    print(values)
+    res = requests.get(url+"/getAct/",params=requestData)
+    values = res.json()
+    # print(values)
     userNum = values.get('userNum')
     users = values.get('users')
 
@@ -91,8 +92,8 @@ def getAct(roomid):
     # print(closeUser,close_num)
     # print(farUser,far_num)
 
-    # if values.status_code == 200:
-    #    print("success")
+    if res.status_code == 200:
+       print("GET success")
 
 
 def submitResult (roomid):
@@ -109,14 +110,13 @@ def submitResult (roomid):
 
     data_json = json.dumps(data)
     # data_json = data
-    print(data_json)
-    # print (data) # for test
+    # print(data_json)
 
     # HAS NOT BEEN TESTED
     r = requests.post(url+"/submitResult/", params=requestData, data=data_json)
 
-    # if r.status_code == 200:
-    #    print("success")
+    if r.status_code == 200:
+       print("POST success")
 
     
 if __name__ == "__main__":
