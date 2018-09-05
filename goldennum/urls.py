@@ -5,4 +5,5 @@ urlpatterns = [
     path('getAct/', views.getAct),
     path('submitResult/', views.submitResult),
     path('startRoom/', views.startRoom),
+    path('stopRoom/', views.stopRoom),
 ]
