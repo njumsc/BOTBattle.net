@@ -106,3 +106,4 @@ venv.bak/
 # Django website secret
 secretkey.py
 nohup.out
+log/*
