@@ -73,8 +73,10 @@ def getAct():
     for user in listUser:
         total += user.userAct1
         total += user.userAct2
-
-    goldNum = (total / (len(listUser) * 2))*0.618
+    if listUser:
+        goldNum = (total / (len(listUser) * 2))*0.618
+    else:
+        goldNum = 0
     close_num = 10000  # 最接近黄金数的数
     far_num = goldNum  # 离黄金数最远的
 
@@ -104,12 +106,16 @@ def submitResult():
     requestData = {"roomid":roomid, "key":secretKey}
     data = {"roundTime":sleeptime, "goldenNum": goldNum, "userNum": userNum, "users":[]}
 
-    for user in listUser:
-        if user.userName == closeUser:
-            data.get("users").append({"userName":user.userName, "userScore":userNum})
-        elif user.userName == farUser:
-            data.get("users").append({"userName": user.userName, "userScore": -2})
-        else:
+    if len(listUser) > 2:
+        for user in listUser:
+            if user.userName == closeUser:
+                data.get("users").append({"userName":user.userName, "userScore":userNum - 2})
+            elif user.userName == farUser:
+                data.get("users").append({"userName": user.userName, "userScore": -2})
+            else:
+                data.get("users").append({"userName": user.userName, "userScore": 0})
+    else:
+        for user in listUser:
             data.get("users").append({"userName": user.userName, "userScore": 0})
 
     data_json = json.dumps(data)
