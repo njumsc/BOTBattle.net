@@ -46,26 +46,25 @@ def userAct(request):
         name = request.session['name']
     except:
         return HttpResponse("No login")
-
+    
     try:
         roomid = request.GET['roomid']
         num1 = float(request.GET['num1'])
         num2 = float(request.GET['num2'])
-        if num1 > 100 or num1 < 0 or num2 > 100 or num2 < 0:
-            return HttpResponse("Numbers overflow")
     except:
         return HttpResponse("Invalid request")
 
-    try:
-        user = User.objects.filter(name=name).filter(room=roomid)[0]
-        print("old")
-    except:
+    if num1 > 100 or num1 < 0 or num2 > 100 or num2 < 0:
+        return HttpResponse("Numbers overflow")
+
+    users = User.objects.filter(name=name).filter(room=roomid)    
+    if len(users) != 0:
+        user = users[0]
+    else:
         user = User()
         user.name = name
         user.room = roomid
         user.score = "0"
-        print("new")
-
     user.act = str(num1) + " " + str(num2)
     user.save()
 
@@ -115,51 +114,60 @@ def submitResult(request):
         result = json.loads(request.body)
     except:
         return HttpResponse("Invalid json")
-                 
+
+    room = Room.objects.get(roomid=roomid)
+    room.history = json.dumps(json.loads(room.history).append(result['goldenNum']))
+    room.time = str(result['roundTime'])
+    room.lastTime = str(int(time.time()))
+    room.save()
+
+    for userInfo in result['users']:
+        userName = userInfo['userName']
+        user = User.objects.get(name=userName, roomid=roomid)
+        user.score = str(int(user.score) + userInfo['userScore'])
+        user.save()
     
+    return HttpResponse("Submit success")
 
 def startRoom(request):
     try:
         key = request.GET['key']
         roomid = request.GET['roomid']
-        time = request.GET['time']
+        timer = request.GET['time']
     except:
         return HttpResponse("Invalid request")
 
     if key != secretkey.secretKey:
         return HttpResponse("Certification failed")
          
-    cmd = "python3 plug-ins/goldennum.py " + secretkey.secretKey + " " + request.GET['roomid'] + " " + request.GET['time']
-    cmd_run = "nohup " + cmd + " >> log/" + request.GET['roomid'] + ".out&"
+    cmd = "python3 plug-ins/goldennum.py " + secretkey.secretKey + " " + roomid + " " + timer
+    cmd_run = "nohup " + cmd + " >> log/" + roomid + ".out&"
 
-    try:
-        room = Room.objects.get(roomid=request.GET['roomid'])
-        if room.status == "on":
-            return HttpResponse("Room alright started")
-        else:
-            room.status = "on"
-            room.time = request.GET['time']
-            room.cmd = cmd
-            room.lastTime = str(int(time.time()))
-            room.save()
-
-            os.system(cmd_run)
-            return HttpResponse("Room restarted")
-    except:
+    rooms = Room.objects.filter(roomid=roomid)
+    if len(rooms) == 0:
         newRoom = Room()
         newRoom.status = "on"
-        newRoom.roomid = request.GET['roomid']
-        newRoom.time = request.GET['time']
+        newRoom.roomid = roomid
+        newRoom.time = timer
         newRoom.history = json.dumps([])
         newRoom.cmd = cmd
         newRoom.lastTime = str(int(time.time()))
         newRoom.save()
-
         os.system(cmd_run)
         return HttpResponse("Room started new")
-        
-    # except:
-    #     return HttpResponse("Invalid request")
+    else:
+        room = rooms[0]
+        flag = os.system('ps axu | grep "' + room.cmd +'" | grep -v "grep" | wc -l')
+        if flag == "0" or room.status != "on":
+            room.status = "on"
+            room.time = timer
+            room.cmd = cmd
+            room.lastTime = str(int(time.time()))
+            room.save()
+            os.system(cmd_run)
+            return HttpResponse("Room restarted")
+        else:
+            return HttpResponse("Room started")
 
 def stopRoom(request):
     try:

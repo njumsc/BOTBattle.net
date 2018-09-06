@@ -5,7 +5,7 @@ from django.db import models
 class Room(models.Model):
     status = models.CharField(max_length=20)
     roomid = models.CharField(max_length=100)
-    history = models.CharField(max_length=1000)
+    history = models.CharField(max_length=5000)
     cmd = models.CharField(max_length=200)
     time = models.CharField(max_length=20)
     lastTime = models.CharField(max_length=20)

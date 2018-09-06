@@ -97,9 +97,9 @@ def getAct(roomid):
 
 
 def submitResult (roomid):
-    #print('Hello Timer2!')
     requestData = {"roomid":roomid, "key":secretKey}
     data = {"roundTime":sleeptime,"goldenNum": goldNum, "userNum": userNum, "users": []}
+    
     for user in listUser:
         if user.userName == closeUser:
             data.get("users").append( {"userName":user.userName,"userScore":userNum} )
@@ -109,12 +109,7 @@ def submitResult (roomid):
             data.get("users").append({"userName": user.userName, "userScore": 0})
 
     data_json = json.dumps(data)
-    # data_json = data
-    # print(data_json)
-
-    # HAS NOT BEEN TESTED
     r = requests.post(url+"/submitResult/", params=requestData, data=data_json)
-
     if r.status_code == 200:
        print("POST success")
 
