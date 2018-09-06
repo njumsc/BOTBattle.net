@@ -12,6 +12,9 @@ import secretkey
 from goldennum.models import User, Room
 # Create your views here.
 
+def getStatus(request):
+    return HttpResponse("fuck")
+
 def userReg(request):
     try:
         name = request.GET['name']
@@ -40,7 +43,7 @@ def userReg(request):
             request.session['name'] = name
             return HttpResponse("User register success")
     else:
-        return HttpResponse("User have logged in")
+        return HttpResponse("You have logged in")
 
 
 def userOut(request):

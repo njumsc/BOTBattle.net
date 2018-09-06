@@ -11,4 +11,6 @@ urlpatterns = [
     path('userReg/', views.userReg),
     path('userOut/', views.userOut),
     path('userAct/', views.userAct),
+
+    path('getStatus/', views.getStatus),
 ]
