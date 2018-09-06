@@ -13,7 +13,39 @@ from goldennum.models import User, Room
 # Create your views here.
 
 def getStatus(request):
-    return HttpResponse("fuck")
+    retval = {
+        "status": "success",
+        "roomid": "",
+        "history": [
+        ],
+        "users": [
+        ],
+        "time": 0
+    }
+    try:
+        roomid = request.GET['name']
+    except:
+        retval['status'] = "Invalid request"
+        return HttpResponse(json.dumps(retval))
+
+    try:
+        room = Room.objects.get(roomid=roomid)
+    except:
+        retval['status'] = "Room doesnot exist"
+        return HttpResponse(json.dumps(retval))
+
+    users = User.objects.filter(room=roomid)
+
+    retval['status'] = roomid
+    retval['history'] = json.loads(room.history)
+    retval['time'] = int(room.time) - (int(time.time()) - int(room.lastTime))
+    for user in users:
+        retval['users'].append({
+            "userName": user.name,
+            "score": (user.score)
+        })
+
+    return HttpResponse(json.dumps(retval))
 
 def userReg(request):
     try:
