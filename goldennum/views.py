@@ -1,13 +1,13 @@
 import json
-import random
+# import random
 import os
 import time
 
-from django.shortcuts import render
+# from django.shortcuts import render
 from django.http import HttpResponse
 
 import secretkey
-from . import datamaker
+# from . import datamaker
 
 from goldennum.models import User, Room
 # Create your views here.
@@ -82,20 +82,23 @@ def getAct(request):
     
     # retjson = datamaker.randomUsers()
     print("Get getAct from room %s" % (roomid))
+
     users = User.objects.filter(room=roomid)
     retjson = {
-        "userNum": 2,
-        "users": [
-            {
-                "userName": "fuck1",
-                "userAct": [1, 2]
-            },
-            {
-                "userName": "fuck2",
-                "userAct": [3, 4]
-            }
-        ]
+        "userNum": len(users),
+        "users":[]
     }
+    for user in users:
+        nums = user.act.split()
+        userInfo = {
+            "userName": user.name,
+            "userAct":[
+                float(nums[0]),
+                float(nums[1])                
+            ]
+        }
+        retjson["users"].append(userInfo)
+
     return HttpResponse(json.dumps(retjson))
 
 def submitResult(request):
