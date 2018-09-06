@@ -19,7 +19,7 @@ def userReg(request):
         return HttpResponse("Invalid request")
 
     if request.session.get("name") is None:
-        if len(User.objects.filter(name=name)) != 0:
+        if User.objects.filter(name=name):
             return HttpResponse("User exist")
         else:
             newUser = User()
@@ -32,7 +32,7 @@ def userReg(request):
             return HttpResponse("User register success")
     else:
         return HttpResponse("User have logged in")
-    
+
 
 def userOut(request):
     try:
@@ -46,7 +46,7 @@ def userAct(request):
         name = request.session['name']
     except:
         return HttpResponse("No login")
-    
+
     try:
         roomid = request.GET['roomid']
         num1 = float(request.GET['num1'])
@@ -57,8 +57,8 @@ def userAct(request):
     if num1 > 100 or num1 < 0 or num2 > 100 or num2 < 0:
         return HttpResponse("Numbers overflow")
 
-    users = User.objects.filter(name=name).filter(room=roomid)    
-    if len(users) != 0:
+    users = User.objects.filter(name=name).filter(room=roomid)
+    if users:
         user = users[0]
     else:
         user = User()
@@ -79,7 +79,7 @@ def getAct(request):
 
     if key != secretkey.secretKey:
         return HttpResponse("Certification failed")
-    
+
     # retjson = datamaker.randomUsers()
     print("Get getAct from room %s" % (roomid))
 
@@ -94,7 +94,7 @@ def getAct(request):
             "userName": user.name,
             "userAct":[
                 float(nums[0]),
-                float(nums[1])                
+                float(nums[1])
             ]
         }
         retjson["users"].append(userInfo)
@@ -110,7 +110,7 @@ def submitResult(request):
 
     if key != secretkey.secretKey:
         return HttpResponse("Certification failed")
-    
+
     print("Get submitResult from room %s" % (roomid))
 
     try:
@@ -129,7 +129,7 @@ def submitResult(request):
         user = User.objects.get(name=userName, roomid=roomid)
         user.score = str(int(user.score) + userInfo['userScore'])
         user.save()
-    
+
     return HttpResponse("Submit success")
 
 def startRoom(request):
@@ -142,12 +142,12 @@ def startRoom(request):
 
     if key != secretkey.secretKey:
         return HttpResponse("Certification failed")
-         
+
     cmd = "python3 plug-ins/goldennum.py " + secretkey.secretKey + " " + roomid + " " + timer
     cmd_run = "nohup " + cmd + " >> log/" + roomid + ".out&"
 
     rooms = Room.objects.filter(roomid=roomid)
-    if len(rooms) == 0:
+    if not rooms:
         newRoom = Room()
         newRoom.status = "on"
         newRoom.roomid = roomid
@@ -181,11 +181,11 @@ def stopRoom(request):
 
     if key != secretkey.secretKey:
         HttpResponse("Certification failed")
-    
+
     try:
         room = Room.objects.get(roomid=roomid)
     except:
-        return HttpResponse("No room match roomid")   
+        return HttpResponse("No room match roomid")
 
     cmd_kill = 'pkill -f "' + room.cmd + '"'
     os.system(cmd_kill)
