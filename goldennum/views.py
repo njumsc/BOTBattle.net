@@ -16,10 +16,8 @@ def getStatus(request):
     retval = {
         "status": "success",
         "roomid": "",
-        "history": [
-        ],
-        "users": [
-        ],
+        "history": [],
+        "users": [],
         "time": 0
     }
     try:
