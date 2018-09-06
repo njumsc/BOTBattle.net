@@ -19,14 +19,23 @@ def userReg(request):
         return HttpResponse("Invalid request")
 
     if request.session.get("name") is None:
-        if User.objects.filter(name=name):
-            return HttpResponse("User exist")
+        users = User.objects.filter(name=name).filter(room="NULL")
+        if users:
+            user = users[0]
+            if user.status == "on":
+                return HttpResponse("User exist")
+            else:
+                request.session['name'] = name
+                user.status = "on"
+                user.save()
+                return HttpResponse("User login success")
         else:
             newUser = User()
             newUser.name = name
-            newUser.room = ""
+            newUser.room = "NULL"
             newUser.score = "0"
             newUser.act = ""
+            newUser.status = "on"
             newUser.save()
             request.session['name'] = name
             return HttpResponse("User register success")
@@ -36,10 +45,16 @@ def userReg(request):
 
 def userOut(request):
     try:
-        del request.session['name']
-        return HttpResponse("Logged out")
+        name = request.session['name']
     except:
         return HttpResponse("No login")
+
+    user = User.objects.filter(name=name).filter(room="NULL")[0]
+    user.status = "off"
+    user.save()
+    del request.session['name']
+    print(user.status)
+    return HttpResponse("Logout success")
 
 def userAct(request):
     try:

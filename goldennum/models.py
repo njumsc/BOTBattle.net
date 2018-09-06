@@ -18,6 +18,7 @@ class User(models.Model):
     room = models.CharField(max_length=100)
     score = models.CharField(max_length=20)
     act = models.CharField(max_length=40)
+    status = models.CharField(max_length=10)
 
     def __str__(self):
         return self.name
