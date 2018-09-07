@@ -21,4 +21,4 @@ class User(models.Model):
     status = models.CharField(max_length=10)
 
     def __str__(self):
-        return self.name
+        return self.room + self.name

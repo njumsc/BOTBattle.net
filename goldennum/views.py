@@ -21,7 +21,7 @@ def getStatus(request):
         "time": 0
     }
     try:
-        roomid = request.GET['name']
+        roomid = request.GET['roomid']
     except:
         retval['status'] = "Invalid request"
         return HttpResponse(json.dumps(retval))
@@ -167,14 +167,16 @@ def submitResult(request):
         return HttpResponse("Invalid json")
 
     room = Room.objects.get(roomid=roomid)
-    room.history = json.dumps(json.loads(room.history).append(result['goldenNum']))
+    # print(json.loads(room.history))
+    room.history = json.dumps(json.loads(room.history) + [result['goldenNum']])
+    # print(json.loads(room.history))
     room.time = str(result['roundTime'])
     room.lastTime = str(int(time.time()))
     room.save()
 
     for userInfo in result['users']:
         userName = userInfo['userName']
-        user = User.objects.get(name=userName, roomid=roomid)
+        user = User.objects.get(name=userName, room=roomid)
         user.score = str(int(user.score) + userInfo['userScore'])
         user.save()
 
@@ -200,7 +202,7 @@ def startRoom(request):
         newRoom.status = "on"
         newRoom.roomid = roomid
         newRoom.time = timer
-        newRoom.history = json.dumps([])
+        newRoom.history = json.dumps([0])
         newRoom.cmd = cmd
         newRoom.lastTime = str(int(time.time()))
         newRoom.save()
@@ -208,8 +210,9 @@ def startRoom(request):
         return HttpResponse("Room started new")
     else:
         room = rooms[0]
-        flag = os.system('ps axu | grep "' + room.cmd +'" | grep -v "grep" | wc -l')
-        if flag == "0" or room.status != "on":
+        # flag = os.system('ps axu | grep "' + room.cmd +'" | grep -v "grep" | wc -l')
+        # print(json.dumps(flag))
+        if room.status != "on":
             room.status = "on"
             room.time = timer
             room.cmd = cmd
@@ -218,7 +221,7 @@ def startRoom(request):
             os.system(cmd_run)
             return HttpResponse("Room restarted")
         else:
-            return HttpResponse("Room started")
+            return HttpResponse("Room have started")
 
 def stopRoom(request):
     try:
