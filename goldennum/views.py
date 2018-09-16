@@ -3,7 +3,7 @@ import json
 import os
 import time
 
-# from django.shortcuts import render
+from django.shortcuts import render
 from django.http import HttpResponse
 
 import secretkey
@@ -11,6 +11,9 @@ import secretkey
 
 from goldennum.models import User, Room
 # Create your views here.
+
+def index(request):
+    return render(request, 'goldennum/goldennum.html')
 
 def getStatus(request):
     retval = {
@@ -34,7 +37,7 @@ def getStatus(request):
 
     users = User.objects.filter(room=roomid)
 
-    retval['status'] = roomid
+    retval['roomid'] = roomid
     retval['history'] = json.loads(room.history)
     retval['time'] = int(room.time) - (int(time.time()) - int(room.lastTime))
     for user in users:
@@ -46,6 +49,7 @@ def getStatus(request):
     return HttpResponse(json.dumps(retval))
 
 def userReg(request):
+    # print(request.GET['name'])
     try:
         name = request.GET['name']
     except:
@@ -102,7 +106,7 @@ def userAct(request):
     except:
         return HttpResponse("Invalid request")
 
-    if num1 > 100 or num1 < 0 or num2 > 100 or num2 < 0:
+    if num1 >= 100 or num1 <= 0 or num2 >= 100 or num2 <= 0:
         return HttpResponse("Numbers overflow")
 
     users = User.objects.filter(name=name).filter(room=roomid)
@@ -117,6 +121,13 @@ def userAct(request):
     user.save()
 
     return HttpResponse("Upload success")
+
+def userStatus(request):
+    try:
+        name = request.session['name']
+    except:
+        return HttpResponse("No User Log In")
+    return HttpResponse(name)
 
 def getAct(request):
     try:
@@ -181,6 +192,18 @@ def submitResult(request):
         user.save()
 
     return HttpResponse("Submit success")
+
+def roomStatus(request):
+    try:
+        roomid = request.GET['roomid']
+    except:
+        return HttpResponse("Invalid request")
+         
+    rooms = Room.objects.filter(roomid=roomid)
+    if not rooms:
+        return HttpResponse("The Room is off")
+    else:
+        return HttpResponse("on")    
 
 def startRoom(request):
     try:
