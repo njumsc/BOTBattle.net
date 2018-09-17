@@ -175,7 +175,7 @@ def submitResult(request):
     print("Get submitResult from room %s" % (roomid))
 
     try:
-        result = json.loads(request.body)
+        result = json.loads(request.body.decode('utf-8'))
     except:
         return HttpResponse("Invalid json")
 
