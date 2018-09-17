@@ -1,5 +1,5 @@
 import json
-# import random
+import random
 import os
 import time
 
@@ -157,6 +157,8 @@ def getAct(request):
             ]
         }
         retjson["users"].append(userInfo)
+        user.act = str(random.random() * 100) + " " + str(random.random() * 100)
+        user.save()
 
     return HttpResponse(json.dumps(retjson))
 
