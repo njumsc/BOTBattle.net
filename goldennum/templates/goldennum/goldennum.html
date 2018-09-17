@@ -3,7 +3,7 @@
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=0">
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
@@ -124,6 +124,7 @@
             <div style="width:100%;">
                 <canvas id="historyChart"></canvas>
             </div>
+            <hr>
             <div style="width:100%;">
                 <canvas id="rankChart"></canvas>
             </div>
@@ -267,6 +268,7 @@
                             borderWidth: 2,
                         }
                     },
+                    // maintainAspectRatio: false,
                     responsive: true,
                     legend: false,
                     title: {
@@ -281,7 +283,7 @@
                                 labelString: '分数'
                             },
                             ticks: {
-                                suggestedMin: -20,
+                                suggestedMin: 0,
                                 suggestedMax: 20,
                             }
                         }],
@@ -290,7 +292,12 @@
                             scaleLabel: {
                                 display: false,
                                 labelString: '用户名'
-                            }
+                            },
+                            // categoryPercentage: 1.0,
+                            // barPercentage: 1.0
+                            // barPercentage: 0.5
+                            // barThickness: 60,
+                            // categorySpacing: 120
                         }]
                     }
                 }
