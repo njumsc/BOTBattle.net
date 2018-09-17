@@ -198,7 +198,7 @@
                     }
                 }
                 timer = setInterval(countDown, 1000);
-                console.log("start timer " + time);
+                // console.log("start timer " + time);
             }
             var historyData = {
                 type: 'line',
@@ -381,7 +381,7 @@
             function tryChgLen(len){
                 historyData.customOption.amount = len;
                 refreshHistory();
-                console.log("set " + len);
+                // console.log("set " + len);
             }
             $('#setLenBtn1').click(
                 function tryChg(){
@@ -407,7 +407,7 @@
                 function trySetRoom() {
                     var roomid = $('input[name="roomid"]').val();
                     var json = {"roomid":roomid}
-                    console.log(roomid);
+                    // console.log(roomid);
                     $.get('roomStatus/', json, function(data, status){
                         if (data == "on"){
                             setCookie('roomid', roomid, 1);
@@ -424,14 +424,14 @@
                 function tryLogin() {
                     var uname = $('input[name="username"]').val();
                     // var pw = $('input[name="password"]').val();
-                    console.log(uname);
+                    // console.log(uname);
                     // console.log(pw);
                     var json = {"name":uname}
-                    console.log(json);
+                    // console.log(json);
                     $.get('userReg/',json,function(data,status){
                         // check the logged in status
-                        console.log(data);
-                        console.log(status);
+                        // console.log(data);
+                        // console.log(status);
                         if (data == "User register success" || data == "User login success"){
                             setCookie("username", data, 1);
                             $('#pUsername').html("当前登陆：" + uname)
@@ -459,7 +459,7 @@
                     var num2 = $('input[name="num2"]').val();
                     var roomid = getCookie("roomid");
                     var json = {"roomid":roomid,"num1":num1,"num2":num2}
-                    console.log(json);
+                    // console.log(json);
                     $.get('userAct/',json,function(data,status){
                         alert(data);
                     })
