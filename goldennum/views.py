@@ -177,7 +177,10 @@ def submitResult(request):
     try:
         result = json.loads(request.body.decode('utf-8'))
     except:
-        return HttpResponse("Invalid json")
+        try:
+            result = json.loads(request.body)
+        except:
+            return HttpResponse("Invalid json")
 
     room = Room.objects.get(roomid=roomid)
     # print(json.loads(room.history))
