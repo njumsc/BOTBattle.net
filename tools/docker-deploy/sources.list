@@ -10,4 +10,3 @@ deb http://mirrors.cloud.aliyuncs.com/ubuntu xenial-security main
 deb-src http://mirrors.cloud.aliyuncs.com/ubuntu xenial-security main
 deb http://mirrors.cloud.aliyuncs.com/ubuntu xenial-security universe
 deb-src http://mirrors.cloud.aliyuncs.com/ubuntu xenial-security universe
-deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable

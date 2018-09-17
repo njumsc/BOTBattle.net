@@ -4,7 +4,7 @@ COPY sources.list /etc/apt/
 RUN apt-get update \
     && apt-get install -y build-essential python3 python3-pip git vim
 
-RUN pip install Django \
+RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple Django \
     && cd /root \
     && git clone https://github.com/Botbattle-net/midware \
     && touch /root/midware/secretkey.py \
