@@ -40,6 +40,9 @@ def getStatus(request):
     retval['roomid'] = roomid
     retval['history'] = json.loads(room.history)
     retval['time'] = int(room.time) - (int(time.time()) - int(room.lastTime))
+    if retval['time'] <= 0:
+        retval['time'] = 10
+        retval['status'] = "Game plug-in dump"
     for user in users:
         retval['users'].append({
             "userName": user.name,

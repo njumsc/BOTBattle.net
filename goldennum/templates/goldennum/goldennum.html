@@ -347,6 +347,8 @@
                                 refreshHistory();
                                 refreshRank(json['users']);
                                 Timer(json['time'] + 1);
+                            }else{
+                                console.log(json['status']);
                             }
                         })
                     }
