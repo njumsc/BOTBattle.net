@@ -289,6 +289,9 @@
                             },
                         }]
                     }
+                },
+                customOption: {
+                    lastLength: 4
                 }
             };
             function refreshHistory(){
@@ -321,11 +324,15 @@
                     rankData.data.labels.push(users[i-1]['userName']);
                     rankData.data.datasets[0].data.push(users[i-1]['score']);
                 }
-                $('#rankDiv').attr("style", "height:"+users.length*50+"px")
-                window.myLineRank.destroy();
-                var ctxRank = document.getElementById('rankChart').getContext('2d');
-                window.myLineRank = new Chart(ctxRank, rankData);
-                // window.myLineRank.update();
+                if (rankData.customOption.lastLength == users.length){
+                    window.myLineRank.update();
+                }else{
+                    rankData.customOption.lastLength = users.length;
+                    $('#rankDiv').attr("style", "height:"+users.length*50+"px")
+                    window.myLineRank.destroy();
+                    var ctxRank = document.getElementById('rankChart').getContext('2d');
+                    window.myLineRank = new Chart(ctxRank, rankData);
+                }
             }
             function refreshStatus(){
                 var roomid = getCookie('roomid');
