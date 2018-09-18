@@ -108,20 +108,6 @@
                 </div>
             </div>
             <hr>
-            <!-- <div class="row last-result" style="margin-left:1px">
-                <div class="col" id="roundNo">
-                    <div class="row"><h5>回合数</h5></div>
-                    <div class="row">1</div>
-                    <div class="row">2</div>
-                    <div class="row">3</div>
-                </div>
-                <div class="col" id="roundGN">
-                    <div class="row"><h5>黄金点</h5></div>
-                    <div class="row">1.1</div>
-                    <div class="row">2.2</div>
-                    <div class="row">3.3</div>
-                </div>
-            </div> -->
             <div class="data-charts">
                 <div class="row">
                     <div class="col">
@@ -149,20 +135,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="row rank" style="margin-left:1px">
-                <div class="col" id="rankNo">
-                    <div class="row"><h5>排名-用户名</h5></div>
-                    <div class="row">1-billy</div>
-                    <div class="row">2-franky</div>
-                    <div class="row">3-olliy</div>
-                </div>
-                <div class="col" id="rankScore">
-                    <div class="row"><h5>分数</h5></div>
-                    <div class="row">100</div>
-                    <div class="row">13</div>
-                    <div class="row">-76</div>
-                </div>
-            </div> -->
         </div>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -315,11 +287,6 @@
                                 display: false,
                                 labelString: '用户名'
                             },
-                            // categoryPercentage: 1.0,
-                            // barPercentage: 1.0
-                            // barPercentage: 0.5
-                            // barThickness: 60,
-                            // categorySpacing: 120
                         }]
                     }
                 }
@@ -333,13 +300,6 @@
                 }else{
                     i_start = len - i_start;
                 }
-                // $('#roundNo').html("<div class=\"row\"><h5>回合数</h5></div>")
-                // $('#roundGN').html("<div class=\"row\"><h5>黄金点</h5></div>")
-                // for (i = 1; i <= 10; i++){
-                //     // console.log(i + " " + json['history'][len-i]);
-                //     $('#roundNo').append("<div class=\"row\">"+i+"</div>")
-                //     $('#roundGN').append("<div class=\"row\">"+history[len-i]+"</div>")
-                // }
                 historyData.data.labels = [];
                 historyData.data.datasets[0].data = [];
                 for (i = i_start; i < len; i++){
@@ -355,12 +315,6 @@
                 users = users.sort(sortRank);
                 var len = users.length;
                 var i;
-                // $('#rankNo').html("<div class=\"row\"><h5>排名-用户名</h5></div>")
-                // $('#rankScore').html("<div class=\"row\"><h5>分数</h5></div>")
-                // for (i = 1; i <= len; i++){
-                //     $('#rankNo').append("<div class=\"row\">"+i+"-"+users[i-1]['userName']+"</div>")
-                //     $('#rankScore').append("<div class=\"row\">"+users[i-1]['score']+"</div>")
-                // }
                 rankData.data.labels = [];
                 rankData.data.datasets[0].data = [];
                 for (i = 1; i <= len; i++){
@@ -383,7 +337,6 @@
                             // console.log(json);
                             if (json['status'] == "success"){
                                 historyData.customOption.history = json['history'];
-                                // refreshHistory(json['history']);
                                 refreshHistory();
                                 refreshRank(json['users']);
                                 Timer(json['time'] + 1);
@@ -402,9 +355,6 @@
                     }
                 })
                 $('#pRoomid').html(getCookie('roomid'))
-                //$.get("/",function(data,status){
-                    //Timer(60)
-                //})
                 var ctxHistory = document.getElementById('historyChart').getContext('2d');
                 window.myLineHistory = new Chart(ctxHistory, historyData);
                 var ctxRank = document.getElementById('rankChart').getContext('2d');
@@ -456,15 +406,10 @@
             $('#loginBtn').click(
                 function tryLogin() {
                     var uname = $('input[name="username"]').val();
-                    // var pw = $('input[name="password"]').val();
-                    // console.log(uname);
-                    // console.log(pw);
                     var json = {"name":uname}
                     // console.log(json);
                     $.get('userReg/',json,function(data,status){
-                        // check the logged in status
                         // console.log(data);
-                        // console.log(status);
                         if (data == "User register success" || data == "User login success"){
                             setCookie("username", data, 1);
                             $('#pUsername').html("当前登陆：" + uname)
