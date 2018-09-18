@@ -20,11 +20,10 @@
                 padding:0;
             }
             li.selector{
-                /* display: inline; */
                 float: right;
             }
             button.selector{
-                background-color: rgb(76, 83, 175); /* Green */
+                background-color: rgb(76, 83, 175); 
                 border: none;
                 color: white;
                 padding: 1px 5px;
@@ -50,7 +49,6 @@
                         <hr>
                         <div id='login-panel'>
                             <input type='text' class='form-control' placeholder="用户名" name="username">
-                            <!-- <input type='text' class='form-control' placeholder="密码" name="password"> -->
                             <button id='loginBtn' class="btn btn-primary btn-block">登录</button>
                         </div>
                         <div id='user-info' style="display: none">
@@ -93,10 +91,21 @@
                         </div>
                     </div>
                 </div>
-                <!-- 访问GET,"userAct/", 参数roomid=从cookie里读出来房间号 num1=数字1 num2=数字2 -->
-                <input type="text" class="form-control" placeholder="你的数字1" name="num1">
-                <input type="text" class="form-control" placeholder="你的数字2" name="num2">
-                <button id="submitNumBtn" type="button" class="btn btn-success btn-block">提交</button>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="你的数字1" name="num1">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="你的数字2" name="num2">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button id="submitNumBtn" type="button" class="btn btn-success btn-block">提交</button>
+                    </div>
+                </div>
             </div>
             <hr>
             <!-- <div class="row last-result" style="margin-left:1px">
@@ -113,21 +122,32 @@
                     <div class="row">3.3</div>
                 </div>
             </div> -->
-            
-            <div>
-                <ul class="selector">
-                    <li class="selector"><button class="selector" id="setLenBtn1">10</button></li>
-                    <li class="selector"><button class="selector" id="setLenBtn2">30</button></li>
-                    <li class="selector"><button class="selector" id="setLenBtn3">100</button></li>
-                    <li class="selector"><button class="selector" id="setLenBtn4">全部</button></li>
-                </ul>
-            </div>
-            <div style="width:100%;" id="historyDiv">
-                <canvas id="historyChart"></canvas>
-            </div>
-            <hr>
-            <div style="height:600px;" id="rankDiv">
-                <canvas id="rankChart"></canvas>
+            <div class="data-charts">
+                <div class="row">
+                    <div class="col">
+                        <ul class="selector">
+                            <li class="selector"><button class="selector" id="setLenBtn1">10</button></li>
+                            <li class="selector"><button class="selector" id="setLenBtn2">30</button></li>
+                            <li class="selector"><button class="selector" id="setLenBtn3">100</button></li>
+                            <li class="selector"><button class="selector" id="setLenBtn4">全部</button></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div style="width:100%;" id="historyDiv">
+                            <canvas id="historyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <div style="height:200px;" id="rankDiv">
+                            <canvas id="rankChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- <div class="row rank" style="margin-left:1px">
                 <div class="col" id="rankNo">
