@@ -15,4 +15,4 @@ RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple Django \
     && python3 manage.py migrate --run-syncdb
 
 CMD cd /root/midware \
-    && nohup python3 manage.py runserver 0.0.0.0:8001 >> log.out&
+    && python3 manage.py runserver 0.0.0.0:8001
