@@ -44,8 +44,8 @@
                     <div class="alert alert-info" role="alert">
                         <h4 class="alert-heading">黄金点游戏 <a class="fas fa-chevron-down" data-toggle="collapse" href="#crules" role="button" aria-expanded="false" aria-controls="crules"></a></h4>
                         <div class="collapse multi-collapse" id="crules">
-                            <p>N个玩家，每人写一个0~100之间的有理数(不包括0或100)，提交给服务器，服务器在当前回合结束时算出所有数字的平均值，然后乘以0.618（所谓黄金分割常数），得到G值。提交的数字最靠近G（取绝对值）的玩家得到N分，离G最远的玩家得到－2分，其他玩家得0分。只有一个玩家参与时不得分。</p>
-                        </div>
+                            <p>N 个玩家，每人写一个 0~100 之间的有理数(不包括 0 或 100 )，提交给服务器，服务器在当前回合结束时算出所有数字的平均值，然后乘以 0.618（所谓黄金分割常数），得到 G 值。提交的数字最靠近 G（取绝对值）的玩家得到 N 分，离 G 最远的玩家得到 －2 分，其他玩家得 0 分。只有一个玩家参与时不得分。</p>
+                        <!-- </div> -->
                         <hr>
                         <div id='login-panel'>
                             <input type='text' class='form-control' placeholder="用户名" name="username">
@@ -72,6 +72,7 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,7 +88,7 @@
                     <div class="col">
                         <div class="row">
                             <p>距本回合结束还有：</p>
-                            <p id="remainTime"></p>
+                            <p id="remainTime">00:00</p>
                         </div>
                     </div>
                 </div>
