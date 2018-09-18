@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 COPY sources.list /etc/apt/
 
 RUN apt-get update \
-    && apt-get install -y build-essential python3 python3-pip git vim
+    && apt-get install -y python3 python3-pip git vim
 
 RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple Django \
     && pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple requests \
@@ -15,4 +15,4 @@ RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple Django \
     && python3 manage.py migrate --run-syncdb
 
 CMD cd /root/midware \
-    && python3 manage.py runserver 0.0.0.0:8001
+    && python3 manage.py runserver 0.0.0.0:8001 >> runserver.log
