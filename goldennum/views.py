@@ -29,6 +29,11 @@ def getStatus(request):
         retval['status'] = "Invalid request"
         return HttpResponse(json.dumps(retval))
 
+    for c in roomid:
+        if not ('0' <= c <= '9' or 'a' <= c <= 'z' or 'A' <= c <= 'Z'):
+            retval['status'] = "Invalid roomid"
+            return HttpResponse(json.dumps(retval))
+
     try:
         room = Room.objects.get(roomid=roomid)
     except:
@@ -57,6 +62,11 @@ def userReg(request):
         name = request.GET['name']
     except:
         return HttpResponse("Invalid request")
+
+    for c in name:
+        if not ('0' <= c <= '9' or 'a' <= c <= 'z' or 'A' <= c <= 'Z'):
+            return HttpResponse("Invalid username")
+    
 
     if request.session.get("name") is None:
         users = User.objects.filter(name=name).filter(room="NULL")
@@ -109,6 +119,13 @@ def userAct(request):
     except:
         return HttpResponse("Invalid request")
 
+    for c in name:
+        if not ('0' <= c <= '9' or 'a' <= c <= 'z' or 'A' <= c <= 'Z'):
+            return HttpResponse("Invalid username")
+    for c in roomid:
+        if not ('0' <= c <= '9' or 'a' <= c <= 'z' or 'A' <= c <= 'Z'):
+            return HttpResponse("Invalid roomid")
+
     if num1 >= 100 or num1 <= 0 or num2 >= 100 or num2 <= 0:
         return HttpResponse("Numbers overflow")
 
@@ -160,9 +177,10 @@ def getAct(request):
             ]
         }
         retjson["users"].append(userInfo)
-        user.act = str(random.random() * 100) + " " + str(random.random() * 100)
+        # user.act = str(random.random() * 100) + " " + str(random.random() * 100)
+        user.act = "0 0"
         user.save()
-
+    print(retjson)
     return HttpResponse(json.dumps(retjson))
 
 def submitResult(request):
@@ -187,7 +205,8 @@ def submitResult(request):
 
     room = Room.objects.get(roomid=roomid)
     # print(json.loads(room.history))
-    room.history = json.dumps(json.loads(room.history) + [result['goldenNum']])
+    if result['goldenNum'] != 0:
+        room.history = json.dumps(json.loads(room.history) + [result['goldenNum']])
     # print(json.loads(room.history))
     room.time = str(result['roundTime'])
     room.lastTime = str(int(time.time()))
@@ -199,6 +218,8 @@ def submitResult(request):
         user.score = str(int(user.score) + userInfo['userScore'])
         user.save()
 
+    print(result)
+
     return HttpResponse("Submit success")
 
 def roomStatus(request):
@@ -206,6 +227,10 @@ def roomStatus(request):
         roomid = request.GET['roomid']
     except:
         return HttpResponse("Invalid request")
+
+    for c in roomid:
+        if not ('0' <= c <= '9' or 'a' <= c <= 'z' or 'A' <= c <= 'Z'):
+            return HttpResponse("Invalid username")
          
     rooms = Room.objects.filter(roomid=roomid)
     if not rooms:
