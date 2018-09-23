@@ -178,8 +178,8 @@ def getAct(request):
             ]
         }
         retjson["users"].append(userInfo)
-        user.act = str(random.random() * 100) + " " + str(random.random() * 100)
-        # user.act = "0 0"
+        # user.act = str(random.random() * 100) + " " + str(random.random() * 100)
+        user.act = "0 0"
         user.save()
     print(retjson)
     return HttpResponse(json.dumps(retjson))
