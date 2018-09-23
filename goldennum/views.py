@@ -66,7 +66,8 @@ def userReg(request):
     for c in name:
         if not ('0' <= c <= '9' or 'a' <= c <= 'z' or 'A' <= c <= 'Z'):
             return HttpResponse("Invalid username")
-    
+    if len(name) > 10:
+        return HttpResponse("Invalid username")
 
     if request.session.get("name") is None:
         users = User.objects.filter(name=name).filter(room="NULL")
@@ -177,8 +178,8 @@ def getAct(request):
             ]
         }
         retjson["users"].append(userInfo)
-        # user.act = str(random.random() * 100) + " " + str(random.random() * 100)
-        user.act = "0 0"
+        user.act = str(random.random() * 100) + " " + str(random.random() * 100)
+        # user.act = "0 0"
         user.save()
     print(retjson)
     return HttpResponse(json.dumps(retjson))

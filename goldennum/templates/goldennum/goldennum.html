@@ -34,6 +34,47 @@
                 font-size: 10px;
                 width: 40px;
             }
+            .p-footer {
+                color: grey;
+                font-size: 10px;
+            }
+            .alert-prompt {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                min-width: 300px;
+                max-width: 600px;
+                transform: translate(-50%,-50%);
+                z-index: 99999;
+                text-align: center;
+                padding: 15px;
+                border-radius: 3px;
+            }
+
+            .alert-success-prompt {
+                color: #3c763d;
+                background-color: #dff0d8;
+                border-color: #d6e9c6;
+            }
+
+            .alert-info-prompt {
+                color: #31708f;
+                background-color: #d9edf7;
+                border-color: #bce8f1;
+            }
+
+            .alert-warning-prompt {
+                color: #8a6d3b;
+                background-color: #fcf8e3;
+                border-color: #faebcc;
+            }
+
+            .alert-danger-prompt {
+                color: #a94442;
+                background-color: #f2dede;
+                border-color: #ebccd1;
+            }
         </style>
         <title>黄金点游戏</title>
     </head>
@@ -44,7 +85,7 @@
                     <div class="alert alert-info" role="alert">
                         <h4 class="alert-heading">黄金点游戏 <a class="fas fa-chevron-down" data-toggle="collapse" href="#crules" role="button" aria-expanded="false" aria-controls="crules"></a></h4>
                         <div class="collapse multi-collapse" id="crules">
-                            <p>N 个玩家，每人写一个 0~100 之间的有理数(不包括 0 或 100 )，提交给服务器，服务器在当前回合结束时算出所有数字的平均值，然后乘以 0.618（所谓黄金分割常数），得到 G 值。提交的数字最靠近 G（取绝对值）的玩家得到 N 分，离 G 最远的玩家得到 －2 分，其他玩家得 0 分。只有一个玩家参与时不得分。</p>
+                            <p>N 个玩家，每人写一个 0~100 之间的有理数(不包括 0 或 100 )，提交给服务器，服务器在当前回合结束时算出所有数字的平均值，然后乘以 0.618（所谓黄金分割常数），得到 G 值。提交的数字最靠近 G（取绝对值）的玩家得到 N 分，离 G 最远的玩家得到 －2 分，其他玩家得 0 分。</p>
                         <!-- </div> -->
                         <hr>
                         <div id='login-panel'>
@@ -136,7 +177,26 @@
                     </div>
                 </div>
             </div>
+            <div class="footer">
+                <div class="row" style="margin-top:50px">
+                    <div class="col">
+                        <p align="center" class="p-footer"><a href="https://njumsc.github.io/" target="view_window">南京大学微软学生俱乐部</a></p>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: -10px">
+                    <div class="col">
+                        <p align="center" class="p-footer"><a href="https://github.com/Botbattle-net" target="view_window">BOTBattle.net</a> 项目组 出品</p>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: -10px">
+                    <div class="col">
+                        <p align="center" class="p-footer">献给最棒的 NJUMSC 和最可爱的雯韵小姐姐</p>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> -->
@@ -292,7 +352,8 @@
                     }
                 },
                 customOption: {
-                    lastLength: 4
+                    lastLength: 4,
+                    lastScore: 0
                 }
             };
             function refreshHistory(){
@@ -310,6 +371,7 @@
                     historyData.data.labels.push(i + 1);
                     historyData.data.datasets[0].data.push(historyData.customOption.history[i]);
                 }
+                // prompt_info("Last goldennum:"+historyData.customOption.history[len-1], 2000);
                 window.myLineHistory.update();
             }
             function refreshRank(users){
@@ -334,6 +396,19 @@
                     var ctxRank = document.getElementById('rankChart').getContext('2d');
                     window.myLineRank = new Chart(ctxRank, rankData);
                 }
+                var scoreLast = 0;
+                for (i = 0; i < len; i++){
+                    if (users[i]['userName'] == getCookie('username')){
+                        scoreLast = users[i]['score'];
+                        // console.log(scoreLast);
+                    }
+                }
+                if (scoreLast != 0){
+                    var numAdd = new Number(scoreLast-rankData.customOption.lastScore);
+                    var numTot = new Number(rankData.customOption.lastScore);
+                    prompt_info("你在上回合获得了 "+numAdd.toString()+" 分. 当前总分 "+numTot+" 分.", 2000);
+                    rankData.customOption.lastScore = scoreLast;
+                }
             }
             function refreshStatus(){
                 var roomid = getCookie('roomid');
@@ -350,6 +425,8 @@
                                 Timer(json['time'] + 1);
                             }else{
                                 console.log(json['status']);
+                                prompt_fail("未知错误, 尝试重连至服务器", 5000);
+                                Timer(7);
                             }
                         })
                     }
@@ -405,10 +482,10 @@
                         if (data == "on"){
                             setCookie('roomid', roomid, 1);
                             $('#pRoomid').html(roomid)
-                            alert("Join room success");
+                            prompt_success("成功加入房间", 2000);
                             location.reload();
                         }else{
-                            alert("The room is off");
+                            prompt_fail("房间已关闭", 2000);
                         }
                     })
                 }
@@ -426,7 +503,22 @@
                             $('#login-panel').css("display", "none")
                             $('#user-info').css("display", "block")
                         }
-                        alert(data);
+                        switch(data){
+                            case "User exist":
+                                prompt_info("用户已存在", 2000);
+                                break;
+                            case "User login success":
+                                prompt_success("登陆成功", 2000);
+                                break;
+                            case "User register success":
+                                prompt_success("注册成功", 2000);
+                                break;
+                            case "You have logged in":
+                                prompt_info("已经登陆, 如需再登陆, 尝试注销", 2000);
+                                break;
+                            default:
+                                prompt_fail(data, 2000);
+                        }
                     })
                 }
             )
@@ -434,7 +526,17 @@
                 function tryLogout() {
                     $.get('userOut/', function(data, status){
                         removeCookie("username");
-                        alert(data);
+                        switch(data){
+                            case "No login":
+                                prompt_fail("未登录, 请先登录再注销", 2000);
+                                break;
+                            case "Logout success":
+                                prompt_success("注销成功", 2000);
+                                break;
+                            default:
+                                console.log(data);
+                                prompt_fail("未知错误", 2000);
+                        }
                     })
                     $('#pUsername').html("")
                     $('#login-panel').css("display", "block")
@@ -449,10 +551,48 @@
                     var json = {"roomid":roomid,"num1":num1,"num2":num2}
                     // console.log(json);
                     $.get('userAct/',json,function(data,status){
-                        alert(data);
+                        switch(data){
+                            case "Numbers overflow":
+                                prompt_fail("数字溢出, 请检查范围", 2000);
+                                break;
+                            case "Upload success":
+                                prompt_success("提交成功", 2000);
+                                break;
+                            case "No login":
+                                prompt_fail("未登录, 请先登录", 2000);
+                                break;
+                            default:
+                                prompt_fail(data, 2000);
+                        }
                     })
                 }
             )
+            var prompt = function (message, style, time){
+                style = (style === undefined) ? 'alert-success' : style;
+                time = (time === undefined) ? 1200 : time;
+                $('<div>')
+                    .appendTo('body')
+                    .addClass('alert-prompt ' + style)
+                    .html(message)
+                    .show()
+                    .delay(time)
+                    .fadeOut();
+            };
+
+            var prompt_success = function(message, time)
+            {
+                prompt(message, 'alert-success-prompt', time);
+            };
+            var prompt_fail = function(message, time){
+                prompt(message, 'alert-danger-prompt', time);
+            };
+            var prompt_warning = function(message, time){
+                prompt(message, 'alert-warning-prompt', time);
+            };
+
+            var prompt_info = function(message, time){
+                prompt(message, 'alert-info-prompt', time);
+            };
         </script>
     </body>
 </html>
