@@ -107,3 +107,6 @@ venv.bak/
 secretkey.py
 nohup.out
 log/*
+
+# Editor & IDE config files
+.vscode/
