@@ -4,5 +4,5 @@ def index(request):
     return HttpResponse("index")
 
 def favicon(request):
-    image_data = open('5ba7145ad390f.32px.ico', 'rb').read()
+    image_data = open('favicon.32px.ico', 'rb').read()
     return HttpResponse(image_data, content_type="image/png")
