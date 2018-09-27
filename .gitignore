@@ -110,3 +110,6 @@ log/*
 
 # Editor & IDE config files
 .vscode/
+
+# tmp files
+tmp/

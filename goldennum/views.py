@@ -87,6 +87,7 @@ def userReg(request):
             newUser.score = "0"
             newUser.act = ""
             newUser.status = "on"
+            newUser.useScript = str(False)
             newUser.save()
             request.session['name'] = name
             return HttpResponse("User register success")
@@ -138,6 +139,7 @@ def userAct(request):
         user.name = name
         user.room = roomid
         user.score = "0"
+        user.useScript = str(False)
     user.act = str(num1) + " " + str(num2)
     user.save()
 
@@ -183,6 +185,41 @@ def getAct(request):
         user.save()
     print(retjson)
     return HttpResponse(json.dumps(retjson))
+
+def userScript(request):
+    try:
+        name = request.session['name']
+        roomid = request.GET['roomid']
+    except:
+        return HttpResponse("No login")
+
+    users = User.objects.filter(name=name).filter(room=roomid)
+    if users:
+        user = users[0]
+    else:
+        user = User()
+        user.name = name
+        user.room = roomid
+        user.score = "0"
+        user.useScript = str(False)
+    
+    filename = f"./tmp/scripts/{user.room}/{user.name}.py"
+
+    if request.method == "POST":
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, "wb") as f:
+            f.write(request.body)
+        user.useScript = str(True)
+        user.save()
+        return HttpResponse("Script created successfully")
+    elif request.method == "DELETE":
+        if bool(user.useScript):
+            os.remove(filename)
+            user.useScript = str(False)
+            user.save()
+        return HttpResponse("Script deleted")
+    else:
+        return HttpResponse("Invalid method")
 
 def submitResult(request):
     try:
@@ -250,8 +287,8 @@ def startRoom(request):
     if key != secretkey.secretKey:
         return HttpResponse("Certification failed")
 
-    cmd = "python3 plug-ins/goldennum.py " + secretkey.secretKey + " " + roomid + " " + timer
-    cmd_run = "nohup " + cmd + " >> log/" + roomid + ".out&"
+    cmd = f'python3 plug-ins/goldennum.py "{secretkey.secretKey}" {roomid} {timer}'
+    cmd_run = f'nohup {cmd} >> log/{roomid}.out'
 
     rooms = Room.objects.filter(roomid=roomid)
     if not rooms:
