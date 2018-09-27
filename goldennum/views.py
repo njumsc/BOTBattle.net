@@ -1,10 +1,12 @@
 import json
 import random
 import os
+import sys
 import time
 
 from django.shortcuts import render
 from django.http import HttpResponse
+from importlib import import_module
 
 import secretkey
 # from . import datamaker
@@ -20,7 +22,7 @@ def getStatus(request):
         "status": "success",
         "roomid": "",
         "history": [],
-        "users": [],
+        "scores": {},
         "time": 0
     }
     try:
@@ -48,11 +50,7 @@ def getStatus(request):
     if retval['time'] <= 0:
         retval['time'] = 10
         retval['status'] = "Game plug-in dump"
-    for user in users:
-        retval['users'].append({
-            "userName": user.name,
-            "score": (user.score)
-        })
+        retval['scores'] = { user.name: user.score for user in users}
 
     return HttpResponse(json.dumps(retval))
 
@@ -87,7 +85,7 @@ def userReg(request):
             newUser.score = "0"
             newUser.act = ""
             newUser.status = "on"
-            newUser.useScript = str(False)
+            newUser.useScript = str()
             newUser.save()
             request.session['name'] = name
             return HttpResponse("User register success")
@@ -139,7 +137,11 @@ def userAct(request):
         user.name = name
         user.room = roomid
         user.score = "0"
-        user.useScript = str(False)
+        user.useScript = str()
+
+    if user.useScript:
+        return HttpResponse("User action has been consigned to script")
+
     user.act = str(num1) + " " + str(num2)
     user.save()
 
@@ -162,6 +164,11 @@ def getAct(request):
     if key != secretkey.secretKey:
         return HttpResponse("Certification failed")
 
+    try:
+        room = Room.objects.get(roomid=roomid)
+    except:
+        return HttpResponse("Room doesnot exist")
+
     # retjson = datamaker.randomUsers()
     print("Get getAct from room %s" % (roomid))
 
@@ -171,18 +178,29 @@ def getAct(request):
         "users":[]
     }
     for user in users:
-        nums = user.act.split()
-        userInfo = {
+        if not user.useScript:
+            nums = [float(n) for n in user.act.split()]
+            user.act = "0 0"
+            user.save()
+        else:
+            getNumbers = import_module(f'tmp.scripts.{roomid}.{user.name}').getNumbers
+            nums = getNumbers(json.loads(room.history))
+            if not (isinstance(nums, list) and len(nums) == 2):
+                nums = [0.0, 0.0]
+
+        # Update user act history of this room
+        # print(json.loads(room.history))
+        history = json.loads(room.history)
+        if user.name not in history["userActs"]:
+            history["userActs"][user.name] = []
+        history["userActs"][user.name].append(nums)
+        room.history = json.dumps(history)
+
+        retjson["users"].append({
             "userName": user.name,
-            "userAct":[
-                float(nums[0]),
-                float(nums[1])
-            ]
-        }
-        retjson["users"].append(userInfo)
-        # user.act = str(random.random() * 100) + " " + str(random.random() * 100)
-        user.act = "0 0"
-        user.save()
+            "userAct": nums
+        })
+    room.save()
     print(retjson)
     return HttpResponse(json.dumps(retjson))
 
@@ -201,21 +219,20 @@ def userScript(request):
         user.name = name
         user.room = roomid
         user.score = "0"
-        user.useScript = str(False)
+        user.useScript = str()
     
     filename = f"./tmp/scripts/{user.room}/{user.name}.py"
 
     if request.method == "POST":
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, "wb") as f:
             f.write(request.body)
         user.useScript = str(True)
         user.save()
         return HttpResponse("Script created successfully")
     elif request.method == "DELETE":
-        if bool(user.useScript):
+        if user.useScript:
             os.remove(filename)
-            user.useScript = str(False)
+            user.useScript = str()
             user.save()
         return HttpResponse("Script deleted")
     else:
@@ -242,10 +259,14 @@ def submitResult(request):
             return HttpResponse("Invalid json")
 
     room = Room.objects.get(roomid=roomid)
-    # print(json.loads(room.history))
+
+    # Update golden number history of this room
     if result['goldenNum'] != 0:
-        room.history = json.dumps(json.loads(room.history) + [result['goldenNum']])
+        history = json.loads(room.history)
+        history['goldenNums'].append(result['goldenNum'])
+        room.history = json.dumps(history)
     # print(json.loads(room.history))
+
     room.time = str(result['roundTime'])
     room.lastTime = str(int(time.time()))
     room.save()
@@ -288,18 +309,27 @@ def startRoom(request):
         return HttpResponse("Certification failed")
 
     cmd = f'python3 plug-ins/goldennum.py "{secretkey.secretKey}" {roomid} {timer}'
-    cmd_run = f'nohup {cmd} >> log/{roomid}.out'
+    cmd_run = f'nohup {cmd} >> tmp/logs/{roomid}.out'
 
+    if sys.platform == "win32":
+        cmd_run = f'start /b {cmd_run}'
+    else:
+        cmd_run = f'{cmd_run} &'
+        
     rooms = Room.objects.filter(roomid=roomid)
     if not rooms:
         newRoom = Room()
         newRoom.status = "on"
         newRoom.roomid = roomid
         newRoom.time = timer
-        newRoom.history = json.dumps([0])
-        newRoom.cmd = cmd
+        newRoom.cmd = cmd.replace('"', '')
         newRoom.lastTime = str(int(time.time()))
+        newRoom.history = json.dumps({
+            "goldenNums": [],
+            "userActs": {}
+        })
         newRoom.save()
+        os.makedirs("./tmp/logs", exist_ok=True)
         os.system(cmd_run)
         return HttpResponse("Room started new")
     else:
@@ -309,9 +339,10 @@ def startRoom(request):
         if room.status != "on":
             room.status = "on"
             room.time = timer
-            room.cmd = cmd
+            room.cmd = cmd.replace('"', '')
             room.lastTime = str(int(time.time()))
             room.save()
+            os.makedirs("./tmp/logs", exist_ok=True)
             os.system(cmd_run)
             return HttpResponse("Room restarted")
         else:
@@ -332,7 +363,11 @@ def stopRoom(request):
     except:
         return HttpResponse("No room match roomid")
 
-    cmd_kill = 'pkill -f "' + room.cmd + '"'
+    if sys.platform == "win32":
+        room_cmd = room.cmd[len("python3 "):] # skip 'python3 ' prefix
+        cmd_kill = f'wmic process where "COMMANDLINE LIKE \'%{room_cmd}%\'" call terminate'
+    else: 
+        cmd_kill = f'pkill -f "{room.cmd}"'
     os.system(cmd_kill)
     room.status = "off"
     room.save()
