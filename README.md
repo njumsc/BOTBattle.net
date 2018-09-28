@@ -1,7 +1,34 @@
-# midware
-Midware for botbattle.net
+# 黄金点游戏
 
-## 用户接口
+> ♔来一场紧张刺激的 ~~飞行棋~~ 黄金点游戏吧！
+
+## 游戏规则
+
+N 个玩家，每人写 **2** 个 **0~100** 之间的有理数 **（不包括 0 或 100 )** ，提交给服务器，服务器在当前回合结束时算出所有数字的 **平均值** ，然后乘以 **0.618**（所谓黄金分割常数），得到 G 值。提交的数字最靠近 G（取绝对值）的玩家得到 **N-2** 分，离 G 最远的玩家得到 **-2** 分，其他玩家得 0 分。
+
+## 运行demo与截图
+
+[Demo](http://118.25.40.230:8001/goldennum)
+
+测试房间：test
+
+![](pics/1.png)
+
+## 管理员文档
+
+### 部署
+
+该repo提供了docker部署方式，docker的安装详见其[官方文档](https://docs.docker.com/install/overview/)
+
+1. 新建文件夹
+2. 下载该repo的[tools/docker-deploy](https://github.com/Botbattle-net/BOTBattle.net/tree/master/tools/docker-deploy)文件夹下的两个文件到该文件夹
+3. 在文件所在目录输入 ```docker build --build-arg default_key="这里填你的secret key" -t botbattle:botbattle .
+```
+4. 待image拉取成功后启动 ```docker run -p 8001:8001 --name botbattle botbattle```
+5. 访问 ```服务器ip:8001/goldennum``` 进入游戏页面
+6. 停止游戏 ```docker stop botbattle```
+
+### 用户接口
 
 |url|方法|功能|
 |:-|:-|:-|
@@ -10,7 +37,7 @@ Midware for botbattle.net
 |/userAct/|GET|提交操作|
 |/getStatus/|GET|获取游戏状态|
 
-### 用户注册登陆
+##### 用户注册登陆
 
 `GET /userReg/?name=$username`
 
@@ -26,7 +53,7 @@ Midware for botbattle.net
 |User login success|重新登陆成功|
 |User register success|用户注册成功|
 
-### 用户注销
+#### 用户注销
 
 `GET /userOut/`
 
@@ -35,7 +62,7 @@ Midware for botbattle.net
 |No login|未登录|
 |Logout success|用户注销成功|
 
-### 提交操作
+#### 提交操作
 
 `GET /userAct/?roomid=$roomid&num1=$num1&num2=$num2`
 
@@ -52,7 +79,7 @@ Midware for botbattle.net
 |Numbers overflow|操作不合标准|
 |Upload success|提交成功|
 
-### 获取游戏状态
+#### 获取游戏状态
 
 `GET /getStatus/?roomid=$roomid`
 
