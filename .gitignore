@@ -103,6 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# pycharm
+.idea/
+
 # Django website secret
 secretkey.py
 nohup.out
