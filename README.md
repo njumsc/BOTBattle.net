@@ -22,8 +22,7 @@ N 个玩家，每人写 **2** 个 **0~100** 之间的有理数 **（不包括 0 
 
 1. 新建文件夹
 2. 下载该repo的[tools/docker-deploy](https://github.com/Botbattle-net/BOTBattle.net/tree/master/tools/docker-deploy)文件夹下的两个文件到该文件夹
-3. 在文件所在目录输入 ```docker build --build-arg default_key="这里填你的secret key" -t botbattle:botbattle .
-```
+3. 在文件所在目录输入 ```docker build --build-arg default_key="这里填你的secret key" -t botbattle:botbattle .```
 4. 待image拉取成功后启动 ```docker run -p 8001:8001 --name botbattle botbattle```
 5. 访问 ```服务器ip:8001/goldennum``` 进入游戏页面
 6. 停止游戏 ```docker stop botbattle```
