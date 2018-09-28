@@ -376,6 +376,12 @@
             }
             function refreshRank(scores){
                 let userCount = Object.keys(scores).length;
+                let scoreLast = scores[getCookie('username')];
+                if (scoreLast) {
+                    let scoreGain = scoreLast - rankData.customOption.lastScore;
+                    prompt_info(`你在上回合获得了 ${scoreGain} 分. 当前总分 ${scoreLast} 分.`, 2000);
+                    rankData.customOption.lastScore = scoreLast;
+                }
                 rankData.data.labels = [];
                 rankData.data.datasets[0].data = [];
                 for (let [name, score] of Object.entries(scores).sort((a, b) => b[1] - a[1])){
@@ -391,15 +397,9 @@
                     let ctxRank = document.getElementById('rankChart').getContext('2d');
                     window.myLineRank = new Chart(ctxRank, rankData);
                 }
-                let scoreLast = scores[getCookie('username')];
-                if (scoreLast != 0) {
-                    prompt_info(`你在上回合获得了 ${scoreLast - rankData.customOption.lastScore} 分. 当前总分 ${scoreLast} 分.`, 2000);
-                    rankData.customOption.lastScore = scoreLast;
-                }
             }
             function refreshStatus() {
-                let roomid = getCookie("roomid");
-                let json = { "roomid": roomid }
+                let json = { roomid: getCookie("roomid") }
                 $.get("roomStatus/", json, function(data, status) {
                     if (data == "on") {
                         $.get("getStatus/", json, function(data, status) {
