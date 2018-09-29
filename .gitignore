@@ -103,6 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# pycharm
+.idea/
+
 # Django website secret
 secretkey.py
 nohup.out
@@ -111,6 +114,7 @@ log/*
 # Editor & IDE config files
 .vscode/
 .vs/
+.idea/
 
 # tmp files
 tmp/
