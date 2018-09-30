@@ -93,25 +93,23 @@ N 个玩家，每人写 **2** 个 **0~100** 之间的有理数 **（不包括 0 
 {
     "status": "success",
     "roomid": "fc1",
-    "history": [
-        12.6,
-        9.2,
-        3.2
-    ],
-    "users": [
-        {
-            "userName": "frank",
-            "score": 12
-        },
-        {
-            "userName": "jack",
-            "score": 3
-        },
-        {
-            "userName": "tom",
-            "score": -4
-        }
-    ],
+    "history": {
+       "goldenNums": [
+            12.6,
+            9.2,
+            3.2
+       ],
+       "userActs": {
+           "frank": [100.0, 0.0],
+           "jack": [1.11514, 15.51],
+           "tom": [2.33, 3.4]
+       }
+    },
+    "scores": {
+        "frank": 12,
+        "jack": 3,
+        "tom": -4
+    },
     "time": 42
 }
 ```

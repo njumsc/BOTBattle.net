@@ -374,57 +374,44 @@
                 // prompt_info("Last goldennum:"+historyData.customOption.history[len-1], 2000);
                 window.myLineHistory.update();
             }
-            function refreshRank(users){
-                function sortRank(a, b){
-                    return b['score'] - a['score'];
-                }
-                users = users.sort(sortRank);
-                var len = users.length;
-                var i;
-                rankData.data.labels = [];
-                rankData.data.datasets[0].data = [];
-                for (i = 1; i <= len; i++){
-                    rankData.data.labels.push(users[i-1]['userName']);
-                    rankData.data.datasets[0].data.push(users[i-1]['score']);
-                }
-                if (rankData.customOption.lastLength == users.length){
-                    window.myLineRank.update();
-                }else{
-                    rankData.customOption.lastLength = users.length;
-                    $('#rankDiv').attr("style", "height:"+users.length*50+"px")
-                    window.myLineRank.destroy();
-                    var ctxRank = document.getElementById('rankChart').getContext('2d');
-                    window.myLineRank = new Chart(ctxRank, rankData);
-                }
-                var scoreLast = 0;
-                for (i = 0; i < len; i++){
-                    if (users[i]['userName'] == getCookie('username')){
-                        scoreLast = users[i]['score'];
-                        // console.log(scoreLast);
-                    }
-                }
-                if (scoreLast != 0){
-                    var numAdd = new Number(scoreLast-rankData.customOption.lastScore);
-                    var numTot = new Number(rankData.customOption.lastScore);
-                    prompt_info("你在上回合获得了 "+numAdd.toString()+" 分. 当前总分 "+numTot+" 分.", 2000);
+            function refreshRank(scores){
+                let userCount = Object.keys(scores).length;
+                let scoreLast = scores[getCookie('username')];
+                if (scoreLast) {
+                    let scoreGain = scoreLast - rankData.customOption.lastScore;
+                    prompt_info(`你在上回合获得了 ${scoreGain} 分. 当前总分 ${scoreLast} 分.`, 2000);
                     rankData.customOption.lastScore = scoreLast;
                 }
+                rankData.data.labels = [];
+                rankData.data.datasets[0].data = [];
+                for (let [name, score] of Object.entries(scores).sort((a, b) => b[1] - a[1])){
+                    rankData.data.labels.push(name);
+                    rankData.data.datasets[0].data.push(score);
+                }
+                if (rankData.customOption.lastLength == userCount){
+                    window.myLineRank.update();
+                } else {
+                    rankData.customOption.lastLength = userCount;
+                    $("#rankDiv").attr("style", `height: ${50 * userCount}px`)
+                    window.myLineRank.destroy();
+                    let ctxRank = document.getElementById('rankChart').getContext('2d');
+                    window.myLineRank = new Chart(ctxRank, rankData);
+                }
             }
-            function refreshStatus(){
-                var roomid = getCookie('roomid');
-                var json = {"roomid":roomid}
-                $.get('roomStatus/', json, function(data, status){
-                    if (data == "on"){
-                        $.get('getStatus/', json, function(data, status){
-                            var json = JSON.parse(data);
+            function refreshStatus() {
+                let json = { roomid: getCookie("roomid") }
+                $.get("roomStatus/", json, function(data, status) {
+                    if (data == "on") {
+                        $.get("getStatus/", json, function(data, status) {
+                            let json = JSON.parse(data);
                             // console.log(json);
-                            if (json['status'] == "success"){
-                                historyData.customOption.history = json['history'];
+                            if (json.status == "success") {
+                                historyData.customOption.history = json.history.goldenNums;
                                 refreshHistory();
-                                refreshRank(json['users']);
-                                Timer(json['time'] + 1);
-                            }else{
-                                console.log(json['status']);
+                                refreshRank(json.scores);
+                                Timer(json.time + 1);
+                            } else {
+                                console.log(json.status);
                                 prompt_fail("未知错误, 尝试重连至服务器", 5000);
                                 Timer(7);
                             }
