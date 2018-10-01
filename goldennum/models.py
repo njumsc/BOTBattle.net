@@ -19,6 +19,7 @@ class User(models.Model):
     score = models.CharField(max_length=20)
     act = models.CharField(max_length=40)
     status = models.CharField(max_length=10)
+    useScript = models.CharField(max_length=5)
 
     def __str__(self):
         return self.room + self.name
