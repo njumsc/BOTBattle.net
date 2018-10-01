@@ -14,6 +14,46 @@ N 个玩家，每人写 **2** 个 **0~100** 之间的有理数 **（不包括 0 
 
 ![](pics/1.png)
 
+## 用户文档
+
+### 自定义脚本
+
+#### 方法
+
+服务器会调用你的脚本中名为 `getNumbers` 的函数 
+
+参数为 `history`
+```js
+{
+    "goldenNums": [
+        12.6,
+        9.2,
+        3.2
+    ],
+    "userActs": {
+        "frank": [100.0, 0.0],
+        "jack": [1.11514, 15.51],
+        "tom": [2.33, 3.4]
+    }
+}
+```
+
+返回值为 `act`
+```js
+[34.2, 1.7]
+```
+#### 样例
+
+```python
+from typing import Dict, List
+import random
+def getNumbers(history):
+    goldenNums: List[float] = history["goldenNums"]
+    userActs: Dict['name', [float, float]] = history["userActs"] 
+    return [random.uniform(0, 100) for _ in range(2)]
+```
+
+
 ## 管理员文档
 
 ### 部署
