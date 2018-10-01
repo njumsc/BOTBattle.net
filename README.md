@@ -134,16 +134,24 @@ def getNumbers(history):
     "status": "success",
     "roomid": "fc1",
     "history": {
-       "goldenNums": [
+        "goldenNums": [
             12.6,
             9.2,
             3.2
-       ],
-       "userActs": {
-           "frank": [100.0, 0.0],
-           "jack": [1.11514, 15.51],
-           "tom": [2.33, 3.4]
-       }
+        ],
+        "userActs": {
+            "frank": [
+                [100.0, 0.0]
+            ],
+            "jack": [
+                [1.15114, 15.51],
+                [11.5114, 0.1551]
+            ],
+            "tom": [
+                [2.33, 6.66], 
+                [5.55, 5.55]
+            ]
+        }
     },
     "scores": {
         "frank": 12,
