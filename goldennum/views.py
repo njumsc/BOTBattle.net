@@ -308,7 +308,7 @@ def startRoom(request):
     if key != secretkey.secretKey:
         return HttpResponse("Certification failed")
 
-    cmd = f'python3 plug-ins/goldennum.py "{secretkey.secretKey}" {roomid} {timer}'
+    cmd = f'python3 goldennum/utils.py "{secretkey.secretKey}" {roomid} {timer}'
     cmd_run = f'nohup {cmd} >> tmp/logs/{roomid}.out'
 
     if sys.platform == "win32":
