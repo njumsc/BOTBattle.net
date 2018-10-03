@@ -24,4 +24,4 @@ class User(models.Model):
     useScript = models.CharField(max_length=5)
 
     def __str__(self):
-        return self.room + self.name
+        return self.room + '_' + self.name
