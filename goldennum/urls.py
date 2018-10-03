@@ -14,7 +14,7 @@ urlpatterns = [
     path('userReg/', views.userReg),
     path('userOut/', views.userOut),
     path('userAct/', views.userAct),
-    path('userStatus/', views.userStatus), 
+    path('userStatus/', views.userStatus),
     path('userScript/', views.userScript),
 
     path('getStatus/', views.getStatus),

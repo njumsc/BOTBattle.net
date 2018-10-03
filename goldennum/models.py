@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 class Room(models.Model):
@@ -12,6 +13,7 @@ class Room(models.Model):
 
     def __str__(self):
         return self.roomid
+
 
 class User(models.Model):
     name = models.CharField(max_length=100)

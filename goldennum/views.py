@@ -12,10 +12,13 @@ import secretkey
 # from . import datamaker
 
 from goldennum.models import User, Room
+
+
 # Create your views here.
 
 def index(request):
     return render(request, 'goldennum/goldennum.html')
+
 
 def getStatus(request):
     retval = {
@@ -47,12 +50,13 @@ def getStatus(request):
     retval['roomid'] = roomid
     retval['history'] = json.loads(room.history)
     retval['time'] = int(room.time) - (int(time.time()) - int(room.lastTime))
-    retval['scores'] = { user.name: int(user.score) for user in users }
+    retval['scores'] = {user.name: int(user.score) for user in users}
     if retval['time'] <= 0:
         retval['time'] = 10
         retval['status'] = "Game plug-in dump"
 
     return HttpResponse(json.dumps(retval))
+
 
 def userReg(request):
     # print(request.GET['name'])
@@ -106,6 +110,7 @@ def userOut(request):
     print(user.status)
     return HttpResponse("Logout success")
 
+
 def userAct(request):
     try:
         name = request.session['name']
@@ -147,12 +152,14 @@ def userAct(request):
 
     return HttpResponse("Upload success")
 
+
 def userStatus(request):
     try:
         name = request.session['name']
     except:
         return HttpResponse("No User Log In")
     return HttpResponse(name)
+
 
 def getAct(request):
     try:
@@ -175,7 +182,7 @@ def getAct(request):
     users = User.objects.filter(room=roomid)
     retjson = {
         "userNum": len(users),
-        "users":[]
+        "users": []
     }
     for user in users:
         if not user.useScript:
@@ -204,6 +211,7 @@ def getAct(request):
     print(retjson)
     return HttpResponse(json.dumps(retjson))
 
+
 def userScript(request):
     try:
         name = request.session['name']
@@ -220,7 +228,7 @@ def userScript(request):
         user.room = roomid
         user.score = "0"
         user.useScript = str()
-    
+
     filename = f"./tmp/scripts/{user.room}/{user.name}.py"
 
     if request.method == "POST":
@@ -237,6 +245,7 @@ def userScript(request):
         return HttpResponse("Script deleted")
     else:
         return HttpResponse("Invalid method")
+
 
 def submitResult(request):
     try:
@@ -281,6 +290,7 @@ def submitResult(request):
 
     return HttpResponse("Submit success")
 
+
 def roomStatus(request):
     try:
         roomid = request.GET['roomid']
@@ -290,12 +300,13 @@ def roomStatus(request):
     for c in roomid:
         if not ('0' <= c <= '9' or 'a' <= c <= 'z' or 'A' <= c <= 'Z'):
             return HttpResponse("Invalid username")
-         
+
     rooms = Room.objects.filter(roomid=roomid)
     if not rooms:
         return HttpResponse("The Room is off")
     else:
-        return HttpResponse("on")    
+        return HttpResponse("on")
+
 
 def startRoom(request):
     try:
@@ -315,7 +326,7 @@ def startRoom(request):
         cmd_run = f'start /b {cmd_run}'
     else:
         cmd_run = f'{cmd_run} &'
-        
+
     rooms = Room.objects.filter(roomid=roomid)
     if not rooms:
         newRoom = Room()
@@ -348,6 +359,7 @@ def startRoom(request):
         else:
             return HttpResponse("Room have started")
 
+
 def stopRoom(request):
     try:
         key = request.GET['key']
@@ -364,9 +376,9 @@ def stopRoom(request):
         return HttpResponse("No room match roomid")
 
     if sys.platform == "win32":
-        room_cmd = room.cmd[len("python3 "):] # skip 'python3 ' prefix
+        room_cmd = room.cmd[len("python3 "):]  # skip 'python3 ' prefix
         cmd_kill = f'wmic process where "COMMANDLINE LIKE \'%{room_cmd}%\'" call terminate'
-    else: 
+    else:
         cmd_kill = f'pkill -f "{room.cmd}"'
     os.system(cmd_kill)
     room.status = "off"
