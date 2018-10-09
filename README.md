@@ -22,9 +22,9 @@ N 个玩家，每人写 **2** 个 **0~100** 之间的有理数 **（不包括 0 
 
 下载 [参赛脚本](https://raw.githubusercontent.com/Botbattle-net/BOTBattle.net/deploy/tools/submit-tools/submit.py) 与你的参赛程序放在同一目录下.
 
-运行参赛脚本, 根据提示设置, 或直接修改 [配置文件](https://github.com/Botbattle-net/BOTBattle.net/blob/deploy/tools/submit-tools/settings.py)
+运行参赛脚本, 根据提示设置, 或直接修改 [配置文件](https://github.com/Botbattle-net/BOTBattle.net/blob/deploy/tools/submit-tools/settings.json)
 
-你的参赛程序会在每回合开始时被调用一次, 本回合的信息存放在目录下的 [data_last.json](https://github.com/Botbattle-net/BOTBattle.net/blob/deploy/tools/submit-tools/data_last.json) 中, 你的程序需要尽快将结果运算出来, 并写入目录下的 [rsl_last.json](https://github.com/Botbattle-net/BOTBattle.net/blob/deploy/tools/submit-tools/rsl.json) 中, 具体格式及含义见文件.
+你的参赛程序会在每回合开始时被调用一次, 本回合的信息存放在目录下的 [data_last.json](https://github.com/Botbattle-net/BOTBattle.net/blob/deploy/tools/submit-tools/data_last.json) 中, 你的程序需要尽快将结果运算出来, 并写入目录下的 [rsl_last.json](https://github.com/Botbattle-net/BOTBattle.net/blob/deploy/tools/submit-tools/rsl_last.json) 中, 具体格式及含义见文件.
 
 ## 管理员文档
 
