@@ -2,5 +2,5 @@
     "url": "http://127.0.0.1/",
     "roomId": "1",
     "userName": "a",
-    "cmd": "f"
+    "cmd": "python3 goldennum.py"
 }
