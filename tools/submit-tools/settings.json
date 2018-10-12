@@ -1,6 +1,6 @@
 {
-    "url": "http://127.0.0.1:8001/goldennum/",
+    "url": "http://101.132.192.233:8001/goldennum/",
     "roomId": "test",
-    "userName": "fuck1",
-    "cmd": "echo fick"
+    "userName": "name",
+    "cmd": "echo f"
 }

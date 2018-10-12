@@ -48,6 +48,7 @@ def chk_room():
     url = jsonSettings['url']
     roomId = jsonSettings['roomId']
     status = s.get(url + 'roomStatus/', params={"roomid":roomId})
+    print(status.text)
     if (status.text != 'on'):
         print("Fail: Room unavailable")
         exit()
