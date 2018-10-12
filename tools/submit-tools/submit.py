@@ -68,7 +68,7 @@ def proc_loop():
     url = jsonSettings['url']
     roomId = jsonSettings['roomId']
     cmd = jsonSettings['cmd']
-    jsonServer = s.get(url + 'getStatus/', params={"roomid":roomId}).text
+    jsonServer = json.loads(s.get(url + 'getStatus/', params={"roomid":roomId}).text)
     with open("data_last.json", "w") as File:
         File.write(json.dumps(jsonServer['history']))
     os.system(cmd)
@@ -78,7 +78,7 @@ def proc_loop():
     chk_user()
     jsonRet['roomid'] = roomId
     s.get(url + 'userAct/', params=jsonRet)
-    return s.get(url + 'getStatus/', params={"roomid":roomId}).text['time']
+    return json.loads(s.get(url + 'getStatus/', params={"roomid":roomId}).text)['time']
 
 
 def proc_main():

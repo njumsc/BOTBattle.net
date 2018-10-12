@@ -1,6 +1,6 @@
 {
-    "url": "http://127.0.0.1/",
-    "roomId": "1",
-    "userName": "a",
-    "cmd": "python3 goldennum.py"
+    "url": "http://127.0.0.1:8001/goldennum/",
+    "roomId": "test",
+    "userName": "fuck1",
+    "cmd": "echo fick"
 }
