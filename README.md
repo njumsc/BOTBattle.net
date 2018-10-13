@@ -20,38 +20,11 @@ N 个玩家，每人写 **2** 个 **0~100** 之间的有理数 **（不包括 0 
 
 #### 方法
 
-服务器会调用你的脚本中名为 `getNumbers` 的函数 
+下载 [参赛脚本](https://raw.githubusercontent.com/Botbattle-net/BOTBattle.net/deploy/tools/submit-tools/submit.py) 与你的参赛程序放在同一目录下.
 
-参数为 `history`
-```js
-{
-    "goldenNums": [
-        12.6,
-        9.2,
-        3.2
-    ],
-    "userActs": {
-        "frank": [100.0, 0.0],
-        "jack": [1.11514, 15.51],
-        "tom": [2.33, 3.4]
-    }
-}
-```
+运行参赛脚本, 根据提示设置, 或直接修改 [配置文件](https://github.com/Botbattle-net/BOTBattle.net/blob/deploy/tools/submit-tools/settings.json)
 
-返回值为 `act`
-```js
-[34.2, 1.7]
-```
-#### 样例
-
-```python
-from typing import Dict, List
-import random
-def getNumbers(history):
-    goldenNums: List[float] = history["goldenNums"]
-    userActs: Dict['name', [float, float]] = history["userActs"] 
-    return [random.uniform(0, 100) for _ in range(2)]
-```
+你的参赛程序会在每回合开始时被调用一次, 本回合的信息存放在目录下的 [data_last.json](https://github.com/Botbattle-net/BOTBattle.net/blob/deploy/tools/submit-tools/data_last.json) 中, 你的程序需要尽快将结果运算出来, 并写入目录下的 [rsl_last.json](https://github.com/Botbattle-net/BOTBattle.net/blob/deploy/tools/submit-tools/rsl_last.json) 中, 具体格式及含义见文件.
 
 ## 管理员文档
 
@@ -61,7 +34,7 @@ def getNumbers(history):
 
 1. 新建文件夹
 2. 下载该repo的[tools/docker-deploy](https://github.com/Botbattle-net/BOTBattle.net/tree/master/tools/docker-deploy)文件夹下的两个文件 ```Dockerfile``` ```sources.list```到该文件夹中
-3. 在文件所在目录输入 ```docker build --build-arg default_key="这里填你的secret key" -t botbattle:botbattle .```
+3. 在文件所在目录输入 ```docker build --build-arg KEY=这里填你的secretkey -t botbattle:botbattle .```
 4. 待image拉取成功后启动 ```docker run -p 8001:8001 --name botbattle botbattle```
 5. 访问 ```服务器ip:8001/goldennum``` 进入游戏页面
 6. 停止游戏 ```docker stop botbattle```
@@ -146,7 +119,7 @@ def getNumbers(history):
                 [11.5114, 0.1551]
             ],
             "tom": [
-                [2.33, 6.66], 
+                [2.33, 6.66],
                 [5.55, 5.55]
             ]
         }

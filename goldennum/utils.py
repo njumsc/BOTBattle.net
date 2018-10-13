@@ -128,9 +128,9 @@ def submitResult():
     if real_user_num > 2:
         for user in listUser:
             score = 0
-            if user.userAct1 == close_num or user.userAct2 == close_num:
+            if abs(user.userAct1 - close_num) < 0.0001 or abs(user.userAct2 - close_num) < 0.0001:
                 score += real_user_num - 2
-            if user.userAct1 == far_num or user.userAct2 == far_num:
+            if abs(user.userAct1 - far_num) < 0.0001 or abs(user.userAct2 - far_num) < 0.0001:
                 score -= 2
             data.get("users").append({"userName": user.userName, "userScore": score})
         for user in listUserFree:
