@@ -10,12 +10,12 @@ RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple Django==2.1 \
     && pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple requests
 
 RUN cd /root \
-    && git clone --single-branch -b deploy https://github.com/Botbattle-net/midware \
-    && touch /root/midware/secretkey.py \
-    && echo "secretKey = '$KEY'" >> /root/midware/secretkey.py \
-    && mkdir /root/midware/log \
-    && cd /root/midware \
+    && git clone --single-branch -b dev https://github.com/Botbattle-net/Botbattle-net \
+    && touch /root/Botbattle-net/secretkey.py \
+    && echo "secretKey = '$KEY'" >> /root/Botbattle-net/secretkey.py \
+    && mkdir /root/Botbattle-net/log \
+    && cd /root/Botbattle-net \
     && python3 manage.py migrate --run-syncdb #bust the cache1
 
-CMD cd /root/midware \
+CMD cd /root/BOTBattle.net \
     && python3 manage.py runserver 0.0.0.0:8001 >> runserver.log
