@@ -1,3 +1,5 @@
+{% load static %}
+
 <!doctype html>
 <html lang="zh">
     <head>
@@ -8,7 +10,7 @@
         <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
         <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-        <link rel="stylesheet" href="/static/goldennum/goldennum.css" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="{% static 'goldennum/goldennum.css' %}" />
         <title>黄金点游戏</title>
     </head>
     <body>
@@ -140,6 +142,6 @@
         <script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js" integrity="sha256-J2sc79NPV/osLcIpzL3K8uJyAD7T5gaEFKlLDM18oxY=" crossorigin="anonymous"></script> -->
         <script src="https://cdn.bootcss.com/Chart.js/2.7.2/Chart.min.js"></script>
-        <script type='text/javascript', src="/static/goldennum/goldennum.js"></script>
+        <script type='text/javascript', src="{% static 'goldennum/goldennum.js' %}"></script>
     </body>
 </html>
