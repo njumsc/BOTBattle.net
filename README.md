@@ -10,10 +10,10 @@ N 个玩家，每人写 **2** 个 **0~100** 之间的有理数 **（不包括 0 
 
 [Demo](http://118.25.40.230:8001/goldennum) 测试房间：test
 
-![](docs/imgs/1.png)
+![demo](docs/imgs/1.png)
 
 ## 相关文档
 
 * [用户文档](docs/user.md)
-* [管理员文档](docs/developer.md)
-* [开发者文档](docs/admin.md)
+* [管理员文档](docs/admin.md)
+* [开发者文档](docs/developer.md)
