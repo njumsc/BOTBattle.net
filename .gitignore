@@ -55,6 +55,7 @@ coverage.xml
 *.log
 local_settings.py
 db.sqlite3*
+goldennum/migrations/
 
 # Flask stuff:
 instance/
@@ -118,3 +119,6 @@ log/*
 
 # tmp files
 tmp/
+
+# logs
+logs/

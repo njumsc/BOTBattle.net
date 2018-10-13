@@ -22,4 +22,5 @@ urlpatterns = [
     path('goldennum/', include('goldennum.urls')),
     path('favicon.ico', views.favicon),
     path('', views.index),
+    path('static/<str:app>/<str:file>', views.static),
 ]

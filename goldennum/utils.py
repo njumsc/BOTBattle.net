@@ -19,6 +19,7 @@ roomid = sys.argv[2]
 sleeptime = int(sys.argv[3])
 real_user_num = 0
 
+
 class MyThread(Thread):
     def __init__(self, event):
         Thread.__init__(self)
@@ -30,6 +31,7 @@ class MyThread(Thread):
             getAct()
             submitResult()
 
+
 class User:
     userName = ""
     userAct1 = 0
@@ -39,6 +41,7 @@ class User:
         self.userName = userName
         self.userAct1 = userAct1
         self.userAct2 = userAct2
+
 
 def getAct():
     global goldNum
@@ -50,13 +53,13 @@ def getAct():
     global real_user_num
     global close_num
     global far_num
-    #print('Hello Timer1!')
+    # print('Hello Timer1!')
 
-    #send request
-    requestData = {"roomid":roomid, "key":secretKey}
+    # send request
+    requestData = {"roomid": roomid, "key": secretKey}
     # print(requestData)
     # values = requests.get(url+"/getAct/",params=requestData)
-    res = requests.get(url+"/getAct/", params=requestData)
+    res = requests.get(url + "/getAct/", params=requestData)
     values = res.json()
     # print(values)
     userNum = values.get('userNum')
@@ -88,7 +91,7 @@ def getAct():
         total += user.userAct1
         total += user.userAct2
     if listUser:
-        goldNum = (total / (real_user_num * 2))*0.618
+        goldNum = (total / (real_user_num * 2)) * 0.618
     else:
         goldNum = 0
 
@@ -119,19 +122,19 @@ def getAct():
 
 
 def submitResult():
-    requestData = {"roomid":roomid, "key":secretKey}
-    data = {"roundTime":sleeptime, "goldenNum": goldNum, "userNum": userNum, "users":[], "debug":[]}
+    requestData = {"roomid": roomid, "key": secretKey}
+    data = {"roundTime": sleeptime, "goldenNum": goldNum, "userNum": userNum, "users": [], "debug": []}
 
     if real_user_num > 2:
         for user in listUser:
             score = 0
-            if user.userAct1 == close_num or user.userAct2 == close_num:
+            if abs(user.userAct1 - close_num) < 0.0001 or abs(user.userAct2 - close_num) < 0.0001:
                 score += real_user_num - 2
-            if user.userAct1 == far_num or user.userAct2 == far_num:
+            if abs(user.userAct1 - far_num) < 0.0001 or abs(user.userAct2 - far_num) < 0.0001:
                 score -= 2
-            data.get("users").append({"userName":user.userName, "userScore":score})
+            data.get("users").append({"userName": user.userName, "userScore": score})
         for user in listUserFree:
-            data.get("users").append({"userName":user.userName, "userScore":0})
+            data.get("users").append({"userName": user.userName, "userScore": 0})
             # if user.userName == closeUser:
             #     data.get("users").append({"userName":user.userName, "userScore":userNum - 2})
             # elif user.userName == farUser:
@@ -145,9 +148,10 @@ def submitResult():
             data.get("users").append({"userName": user.userName, "userScore": 0})
 
     data_json = json.dumps(data)
-    r = requests.post(url+"/submitResult/", params=requestData, data=data_json)
+    r = requests.post(url + "/submitResult/", params=requestData, data=data_json)
     if r.status_code == 200:
         print("POST success")
+
 
 if __name__ == "__main__":
     stopFlag = Event()
@@ -155,4 +159,4 @@ if __name__ == "__main__":
     thread.start()
 
     # this will stop the timer
-    #stopFlag.set()
+    # stopFlag.set()
