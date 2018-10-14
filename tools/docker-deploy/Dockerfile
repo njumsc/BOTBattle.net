@@ -15,7 +15,8 @@ RUN cd /root \
     && echo "secretKey = '$KEY'" >> /root/BOTBattle.net/secretkey.py \
     && mkdir /root/BOTBattle.net/log \
     && cd /root/BOTBattle.net \
-    && python3 manage.py migrate --run-syncdb #bust the cache1
+    && python3 manage.py migrate --run-syncdb \
+    && python3 manage.py collectstatic # cache
 
 CMD cd /root/BOTBattle.net \
     && python3 manage.py runserver 0.0.0.0:8001 >> runserver.log
