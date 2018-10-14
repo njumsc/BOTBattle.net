@@ -24,7 +24,7 @@ SECRET_KEY = secretkey.secretKey
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = False
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '*'
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    # 'django.contrib.staticfiles',
 
     'goldennum',
 ]
@@ -119,4 +119,4 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
