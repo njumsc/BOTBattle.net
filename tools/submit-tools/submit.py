@@ -51,7 +51,9 @@ def chk_room():
     print(status.text)
     if (status.text != 'on'):
         print("Fail: Room unavailable")
-        exit()
+        print("retry in 10s")
+        # time.sleep(10)
+        # chk_room()
 
 def chk_user():
     url = jsonSettings['url']
@@ -100,4 +102,10 @@ if __name__ == "__main__":
         print('Now exit')
         exit()
     s = requests.Session()
-    proc_main()
+    while True:
+        try:
+            proc_main()
+        except Exception as inst:
+            print(inst)
+            print("retry in 10s")
+            time.sleep(10)
