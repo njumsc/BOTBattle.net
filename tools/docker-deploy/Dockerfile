@@ -10,7 +10,7 @@ RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple Django==2.1 \
     && pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple requests
 
 RUN cd /root \
-    && git clone --single-branch -b dev https://github.com/Botbattle-net/BOTBattle.net \
+    && git clone --single-branch -b master https://github.com/Botbattle-net/BOTBattle.net \
     && touch /root/BOTBattle.net/secretkey.py \
     && echo "secretKey = '$KEY'" >> /root/BOTBattle.net/secretkey.py \
     && mkdir /root/BOTBattle.net/log \
