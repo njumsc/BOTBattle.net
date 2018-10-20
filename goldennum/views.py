@@ -200,7 +200,7 @@ def getAct(request):
         history = json.loads(room.history)
         if user.name not in history["userActs"]:
             history["userActs"][user.name] = []
-        history["userActs"][user.name].append(nums)
+        history["userActs"][user.name].append([round(n, 2) for n in nums])
         room.history = json.dumps(history)
 
         retjson["users"].append({
