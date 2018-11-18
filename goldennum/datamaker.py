@@ -1,4 +1,6 @@
 import random
+
+
 # import string
 
 def randomUser():
@@ -23,6 +25,7 @@ def randomUser():
         ]
     }
     return retval
+
 
 def randomUsers():
     userNames = [

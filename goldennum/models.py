@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 class Room(models.Model):
@@ -13,12 +14,14 @@ class Room(models.Model):
     def __str__(self):
         return self.roomid
 
+
 class User(models.Model):
     name = models.CharField(max_length=100)
     room = models.CharField(max_length=100)
     score = models.CharField(max_length=20)
     act = models.CharField(max_length=40)
     status = models.CharField(max_length=10)
+    useScript = models.CharField(max_length=5)
 
     def __str__(self):
-        return self.room + self.name
+        return self.room + '_' + self.name

@@ -1,12 +1,11 @@
-deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial main
-deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial main
-deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates main
-deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates main
-deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial universe
-deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial universe
-deb http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates universe
-deb-src http://mirrors.cloud.aliyuncs.com/ubuntu/ xenial-updates universe
-deb http://mirrors.cloud.aliyuncs.com/ubuntu xenial-security main
-deb-src http://mirrors.cloud.aliyuncs.com/ubuntu xenial-security main
-deb http://mirrors.cloud.aliyuncs.com/ubuntu xenial-security universe
-deb-src http://mirrors.cloud.aliyuncs.com/ubuntu xenial-security universe
+deb http://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse
+
+deb http://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse
+
+deb http://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse
+
+deb http://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse
