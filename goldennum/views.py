@@ -17,7 +17,11 @@ from goldennum.models import User, Room
 # Create your views here.
 
 def index(request):
-    return render(request, 'goldennum/goldennum.html')
+    return render(request, 'goldennum/index.html')
+
+
+def admin(request):
+    return render(request, 'goldennum/admin.html')
 
 
 def getStatus(request):
@@ -232,11 +236,12 @@ def userScript(request):
     filename = f"./tmp/scripts/{user.room}/{user.name}.py"
 
     if request.method == "POST":
-        with open(filename, "wb") as f:
-            f.write(request.body)
-        user.useScript = str(True)
-        user.save()
-        return HttpResponse("Script created successfully")
+        # with open(filename, "wb") as f:
+        #     f.write(request.body)
+        # user.useScript = str(True)
+        # user.save()
+        # return HttpResponse("Script created successfully")
+        return HttpResponse("User script  disabled.")
     elif request.method == "DELETE":
         if user.useScript:
             os.remove(filename)
