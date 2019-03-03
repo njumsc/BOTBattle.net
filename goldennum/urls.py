@@ -3,12 +3,13 @@ from goldennum import views
 
 urlpatterns = [
     path('', views.index),
+    path('admin/', views.admin),
+    path('admin/startRoom/', views.startRoom),
+    path('admin/stopRoom/', views.stopRoom),
 
     path('getAct/', views.getAct),
     path('submitResult/', views.submitResult),
 
-    path('startRoom/', views.startRoom),
-    path('stopRoom/', views.stopRoom),
     path('roomStatus/', views.roomStatus),
 
     path('userReg/', views.userReg),
