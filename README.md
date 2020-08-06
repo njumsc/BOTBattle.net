@@ -1,4 +1,4 @@
-# DEPRECATED, MOVED TO [goldennum-remastered](https://github.com/Botbattle-net/goldennum-remastered)
+# DEPRECATED, USE [forewing/goldennum](https://github.com/forewing/goldennum)
 # 已弃用，请使用重制版
 
 # 黄金点游戏_弃用版
